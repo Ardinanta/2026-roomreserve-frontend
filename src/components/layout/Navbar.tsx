@@ -109,7 +109,7 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    {/* Hamburger */}
+                    {/* Hamburger menu */}
                     <button className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer group" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
                         <span className={`block w-6 h-0.5 bg-slate-400 group-hover:bg-white rounded-full transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
                         <span className={`block w-6 h-0.5 bg-slate-400 group-hover:bg-white rounded-full transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
