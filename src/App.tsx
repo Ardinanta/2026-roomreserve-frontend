@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-// import Navbar from "./components/layout/Navbar";
+import Navbar from "./components/layout/Navbar";
 import DemoPage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -23,7 +23,7 @@ export default function App() {
         <BrowserRouter>
             <AuthProvider>
                 <div className="min-h-screen bg-white">
-                    {/* <Navbar /> */}
+                    <Navbar />
                     <Routes>
                         <Route path="/" element={<DemoPage />} />
                         <Route path="/login" element={<LoginPage />} />
