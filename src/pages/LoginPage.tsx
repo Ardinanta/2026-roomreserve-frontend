@@ -19,21 +19,21 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-[calc(100vh-72px)] px-4 bg-slate-50">
-            <div className="w-full max-w-lg">
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-10">
+        <div className="flex justify-center items-center min-h-[calc(100vh-56px)] px-4 bg-slate-50">
+            <div className="w-full max-w-md">
+                <div className="bg-white rounded-xl border border-slate-200 shadow-lg shadow-slate-200/50 p-7">
                     {/* Header */}
-                    <div className="text-center mb-8">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
-                            <span className="text-white text-2xl font-bold">R</span>
+                    <div className="text-center mb-6">
+                        <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md shadow-blue-500/25">
+                            <span className="text-white text-base font-bold">R</span>
                         </div>
-                        <h2 className="text-3xl font-bold text-slate-900">Selamat Datang</h2>
-                        <p className="text-base text-slate-500 mt-2">Masuk ke akun RoomReserve</p>
+                        <h2 className="text-2xl font-bold text-slate-900">Selamat Datang</h2>
+                        <p className="text-sm text-slate-500 mt-1">Masuk ke akun RoomReserve</p>
                     </div>
 
                     {/* Message */}
                     {msg && (
-                        <div className={`text-center text-base mb-6 p-4 rounded-xl font-medium ${
+                        <div className={`text-center text-sm mb-4 p-3 rounded-lg font-medium ${
                             msg.includes("berhasil")
                                 ? "bg-green-50 text-green-700 border border-green-200"
                                 : "bg-red-50 text-red-700 border border-red-200"
@@ -43,49 +43,49 @@ export default function LoginPage() {
                     )}
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Email</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
                             <input
                                 type="email"
                                 placeholder="contoh@mail.com"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 required
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-400"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-400"
                             />
                         </div>
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Password</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
                             <input
                                 type="password"
                                 placeholder="Masukkan password"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                                 required
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-400"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-400"
                             />
                         </div>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-blue-400 disabled:to-indigo-400 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all cursor-pointer disabled:cursor-not-allowed"
+                            className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:from-blue-400 disabled:to-indigo-400 text-white rounded-lg font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all cursor-pointer disabled:cursor-not-allowed"
                         >
                             {loading ? "Memproses..." : "Login"}
                         </button>
                     </form>
 
                     {/* Footer */}
-                    <p className="text-center text-base text-slate-500 mt-6">
+                    <p className="text-center text-sm text-slate-500 mt-5">
                         Belum punya akun?{" "}
                         <a href="/register" className="text-blue-600 hover:text-blue-700 font-semibold">Register</a>
                     </p>
                 </div>
 
                 {/* Demo Info */}
-                <div className="mt-4 bg-white rounded-xl border border-slate-200 p-5">
-                    <p className="text-sm font-semibold text-slate-500 mb-2">Akun Demo</p>
-                    <div className="space-y-1.5 text-sm text-slate-400">
+                <div className="mt-3 bg-white rounded-lg border border-slate-200 p-4">
+                    <p className="text-xs font-semibold text-slate-500 mb-1.5">Akun Demo</p>
+                    <div className="space-y-1 text-xs text-slate-400">
                         <p>Admin: <span className="font-mono text-slate-600">admin@roomreserve.com</span> / <span className="font-mono text-slate-600">password123</span></p>
                         <p>User: <span className="font-mono text-slate-600">ahmad@mail.com</span> / <span className="font-mono text-slate-600">password123</span></p>
                     </div>
