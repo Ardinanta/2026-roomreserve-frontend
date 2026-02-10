@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function RegisterPage() {
-    const navigate = useNavigate();
+    const { register } = useAuth();
     const [form, setForm] = useState({
         fullName: "",
         email: "",
@@ -28,49 +28,33 @@ export default function RegisterPage() {
             return;
         }
 
-        try {
-            const res = await fetch("http://localhost:5000/api/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    fullName: form.fullName,
-                    email: form.email,
-                    password: form.password,
-                    role: form.role,
-                }),
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                setMsg("Registrasi berhasil! Silakan login.");
-                setTimeout(() => navigate("/login"), 2000);
-            } else {
-                setMsg(data.message || "Registrasi gagal");
-            }
-        } catch {
-            setMsg("Tidak dapat terhubung ke server");
-        }
-
+        const result = await register({
+            fullName: form.fullName,
+            email: form.email,
+            password: form.password,
+            confirmPassword: form.confirmPassword,
+        });
+        setMsg(result.message);
+        if (result.success) window.location.href = "/";
         setLoading(false);
     };
 
     return (
-        <div className="flex justify-center items-center min-h-[calc(100vh-72px)] px-4 py-8 bg-slate-50">
-            <div className="w-full max-w-lg">
-                <div className="bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-10">
+        <div className="flex justify-center items-center min-h-[calc(100vh-56px)] px-4 py-6 bg-slate-50">
+            <div className="w-full max-w-md">
+                <div className="bg-white rounded-xl border border-slate-200 shadow-lg shadow-slate-200/50 p-7">
                     {/* Header */}
-                    <div className="text-center mb-8">
-                        <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25">
-                            <span className="text-white text-2xl font-bold">R</span>
+                    <div className="text-center mb-6">
+                        <div className="w-11 h-11 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md shadow-emerald-500/25">
+                            <span className="text-white text-base font-bold">R</span>
                         </div>
-                        <h2 className="text-3xl font-bold text-slate-900">Buat Akun Baru</h2>
-                        <p className="text-base text-slate-500 mt-2">Daftar untuk menggunakan RoomReserve</p>
+                        <h2 className="text-2xl font-bold text-slate-900">Buat Akun Baru</h2>
+                        <p className="text-sm text-slate-500 mt-1">Daftar untuk menggunakan RoomReserve</p>
                     </div>
 
                     {/* Message */}
                     {msg && (
-                        <div className={`text-center text-base mb-6 p-4 rounded-xl font-medium ${
+                        <div className={`text-center text-sm mb-4 p-3 rounded-lg font-medium ${
                             msg.includes("berhasil")
                                 ? "bg-green-50 text-green-700 border border-green-200"
                                 : "bg-red-50 text-red-700 border border-red-200"
@@ -80,9 +64,9 @@ export default function RegisterPage() {
                     )}
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Nama Lengkap</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Nama Lengkap</label>
                             <input
                                 type="text"
                                 name="fullName"
@@ -90,11 +74,11 @@ export default function RegisterPage() {
                                 value={form.fullName}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
                             />
                         </div>
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Email</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
                             <input
                                 type="email"
                                 name="email"
@@ -102,23 +86,23 @@ export default function RegisterPage() {
                                 value={form.email}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
                             />
                         </div>
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Role</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Role</label>
                             <select
                                 name="role"
                                 value={form.role}
                                 onChange={handleChange}
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none cursor-pointer"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none cursor-pointer"
                             >
                                 <option value="User">User</option>
                                 <option value="Admin">Admin</option>
                             </select>
                         </div>
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Password</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
                             <input
                                 type="password"
                                 name="password"
@@ -127,11 +111,11 @@ export default function RegisterPage() {
                                 onChange={handleChange}
                                 required
                                 minLength={6}
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
                             />
                         </div>
                         <div>
-                            <label className="block text-base font-semibold text-slate-700 mb-2">Konfirmasi Password</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Konfirmasi Password</label>
                             <input
                                 type="password"
                                 name="confirmPassword"
@@ -140,20 +124,20 @@ export default function RegisterPage() {
                                 onChange={handleChange}
                                 required
                                 minLength={6}
-                                className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
+                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all placeholder:text-slate-400"
                             />
                         </div>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 disabled:from-emerald-300 disabled:to-cyan-400 text-white rounded-xl font-semibold text-lg shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all cursor-pointer disabled:cursor-not-allowed"
+                            className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 disabled:from-emerald-300 disabled:to-cyan-400 text-white rounded-lg font-semibold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all cursor-pointer disabled:cursor-not-allowed"
                         >
                             {loading ? "Memproses..." : "Register"}
                         </button>
                     </form>
 
                     {/* Footer */}
-                    <p className="text-center text-base text-slate-500 mt-6">
+                    <p className="text-center text-sm text-slate-500 mt-5">
                         Sudah punya akun?{" "}
                         <a href="/login" className="text-blue-600 hover:text-blue-700 font-semibold">Login</a>
                     </p>

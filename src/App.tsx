@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navbar from "./components/layout/Navbar";
 import DemoPage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import RoomListPage from "./pages/rooms/RoomListPage";
+import RoomDetailPage from "./pages/rooms/RoomDetailPage";
+import AdminRoomListPage from "./pages/admin/AdminRoomListPage";
+import AdminRoomFormPage from "./pages/admin/AdminRoomFormPage";
 
 function Placeholder({ text, icon }: { text: string; icon: string }) {
     return (
@@ -18,6 +21,22 @@ function Placeholder({ text, icon }: { text: string; icon: string }) {
     );
 }
 
+// Guard: harus login
+function PrivateRoute({ children }: { children: React.ReactNode }) {
+    const { isAuthenticated, loading } = useAuth();
+    if (loading) return null;
+    return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+}
+
+// Guard: harus login + Admin
+function AdminRoute({ children }: { children: React.ReactNode }) {
+    const { isAuthenticated, user, loading } = useAuth();
+    if (loading) return null;
+    if (!isAuthenticated) return <Navigate to="/login" replace />;
+    if (user?.role !== "Admin") return <Navigate to="/" replace />;
+    return <>{children}</>;
+}
+
 export default function App() {
     return (
         <BrowserRouter>
@@ -25,13 +44,28 @@ export default function App() {
                 <div className="min-h-screen bg-white">
                     <Navbar />
                     <Routes>
+                        {/* Public */}
                         <Route path="/" element={<DemoPage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/register" element={<RegisterPage />} />
-                        <Route path="/borrowings" element={<Placeholder icon="📋" text="Halaman Peminjaman" />} />
-                        <Route path="/borrowings/create" element={<Placeholder icon="➕" text="Ajukan Peminjaman" />} />
-                        <Route path="/rooms" element={<Placeholder icon="🏠" text="Halaman Ruangan" />} />
-                        <Route path="/rooms/create" element={<Placeholder icon="⚙️" text="Kelola Ruangan" />} />
+
+                        {/* User: Ruangan */}
+                        <Route path="/rooms" element={<PrivateRoute><RoomListPage /></PrivateRoute>} />
+                        <Route path="/rooms/:id" element={<PrivateRoute><RoomDetailPage /></PrivateRoute>} />
+
+                        {/* Admin: Kelola Ruangan */}
+                        <Route path="/admin/rooms" element={<AdminRoute><AdminRoomListPage /></AdminRoute>} />
+                        <Route path="/admin/rooms/create" element={<AdminRoute><AdminRoomFormPage /></AdminRoute>} />
+                        <Route path="/admin/rooms/edit/:id" element={<AdminRoute><AdminRoomFormPage /></AdminRoute>} />
+
+                        {/* Placeholder */}
+                        <Route path="/borrowings" element={<PrivateRoute><Placeholder icon="📋" text="Peminjaman Saya" /></PrivateRoute>} />
+                        <Route path="/borrowings/create" element={<PrivateRoute><Placeholder icon="➕" text="Ajukan Peminjaman" /></PrivateRoute>} />
+                        <Route path="/admin" element={<AdminRoute><Placeholder icon="📊" text="Dashboard Admin" /></AdminRoute>} />
+                        <Route path="/admin/borrowings" element={<AdminRoute><Placeholder icon="📋" text="Semua Peminjaman" /></AdminRoute>} />
+
+                        {/* Fallback */}
+                        <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                 </div>
             </AuthProvider>
