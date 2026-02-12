@@ -8,8 +8,10 @@ import RoomListPage from "./pages/rooms/RoomListPage";
 import RoomDetailPage from "./pages/rooms/RoomDetailPage";
 import AdminRoomListPage from "./pages/admin/AdminRoomListPage";
 import AdminRoomFormPage from "./pages/admin/AdminRoomFormPage";
-import BorrowingsPage from "./pages/BorrowingsPage";
-import CreateBorrowingPage from "./pages/CreateBorrowingPage";
+import BorrowingsPage from "./pages/borrowing/BorrowingsPage";
+import CreateBorrowingPage from "./pages/borrowing/CreateBorrowingPage";
+import BorrowingDetailPage from "./pages/borrowing/BorrowingDetailPage";
+import EditBorrowingPage from "./pages/borrowing/EditBorrowingPage";
 
 function Placeholder({ text, icon }: { text: string; icon: string }) {
     return (
@@ -63,6 +65,8 @@ export default function App() {
                         {/* Placeholder */}
                         <Route path="/borrowings" element={<PrivateRoute><BorrowingsPage /></PrivateRoute>} />
                         <Route path="/borrowings/create" element={<PrivateRoute><CreateBorrowingPage /></PrivateRoute>} />
+                        <Route path="/borrowings/:id" element={<PrivateRoute><BorrowingDetailPage /></PrivateRoute>} />
+                        <Route path="/borrowings/:id/edit" element={<PrivateRoute><EditBorrowingPage /></PrivateRoute>} />
                         <Route path="/admin" element={<AdminRoute><Placeholder icon="📊" text="Dashboard Admin" /></AdminRoute>} />
                         <Route path="/admin/borrowings" element={<AdminRoute><Placeholder icon="📋" text="Semua Peminjaman" /></AdminRoute>} />
 

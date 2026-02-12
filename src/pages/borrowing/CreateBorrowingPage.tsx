@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchRooms } from "../api/rooms";
-import { createBorrowing } from "../api/borrowings";
-import type { Room, CreateBorrowingRequest } from "../types";
+import { fetchRooms } from "../../api/rooms";
+import { createBorrowing } from "../../api/borrowings";
+import type { Room, CreateBorrowingRequest } from "../../types";
 
 export default function CreateBorrowingPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
