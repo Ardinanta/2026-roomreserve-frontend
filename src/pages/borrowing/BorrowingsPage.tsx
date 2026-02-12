@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { format } from "date-fns";
 import { fetchMyBorrowings, cancelBorrowing } from "../../api/borrowings";
 import type { Borrowing } from "../../types";
 import { Link, useNavigate } from "react-router-dom";
@@ -72,8 +73,8 @@ export default function BorrowingsPage() {
                   className={`border-b border-slate-200 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-blue-50 transition-all`}
                 >
                   <td className="px-6 py-3 text-sm font-semibold text-slate-900">{b.roomName || "-"}</td>
-                  <td className="px-6 py-3 text-sm text-slate-700">{b.borrowDate}</td>
-                  <td className="px-6 py-3 text-sm text-slate-700">{b.startTime} - {b.endTime}</td>
+                  <td className="px-6 py-3 text-sm text-slate-700">{format(new Date(b.borrowDate), "dd/MM/yyyy")}</td>
+                  <td className="px-6 py-3 text-sm text-slate-700">{b.startTime.slice(0,5)} - {b.endTime.slice(0,5)}</td>
                   <td className="px-6 py-3 text-sm text-slate-700">{b.purpose}</td>
                   <td className="px-6 py-3 text-sm">
                     <span className={`inline-block px-2 py-1 rounded border text-xs font-semibold ${statusColor[b.status.toUpperCase?.()] || "bg-slate-100 text-slate-700 border-slate-300"}`}>
