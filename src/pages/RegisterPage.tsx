@@ -6,7 +6,6 @@ export default function RegisterPage() {
     const [form, setForm] = useState({
         fullName: "",
         email: "",
-        role: "User",
         password: "",
         confirmPassword: "",
     });
@@ -90,18 +89,6 @@ export default function RegisterPage() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Role</label>
-                            <select
-                                name="role"
-                                value={form.role}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all appearance-none cursor-pointer"
-                            >
-                                <option value="User">User</option>
-                                <option value="Admin">Admin</option>
-                            </select>
-                        </div>
-                        <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
                             <input
                                 type="password"
@@ -130,9 +117,9 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 disabled:from-emerald-300 disabled:to-cyan-400 text-white rounded-lg font-semibold text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all cursor-pointer disabled:cursor-not-allowed"
+                            className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-600 text-white text-base font-semibold rounded-lg shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-105 transition-all disabled:opacity-60"
                         >
-                            {loading ? "Memproses..." : "Register"}
+                            {loading ? "Mendaftar..." : "Daftar"}
                         </button>
                     </form>
 
