@@ -50,24 +50,24 @@ export default function AdminRoomListPage() {
         );
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="max-w-5xl mx-auto px-1 py-8">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900">Kelola Ruangan</h1>
                     <p className="text-base text-slate-500 mt-1">{rooms.length} ruangan terdaftar</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                     <input
                         type="text"
                         placeholder="Cari ruangan..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full md:w-64 px-5 py-3 bg-white border-2 border-slate-200 rounded-xl text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-400"
+                        className="w-full md:w-44 px-3 py-2 bg-white border-2 border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-400"
                     />
                     <Link
                         to="/admin/rooms/create"
-                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-semibold text-base shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all whitespace-nowrap flex items-center"
+                        className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-lg font-semibold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all whitespace-nowrap flex items-center"
                     >
                         + Tambah
                     </Link>
@@ -129,16 +129,16 @@ export default function AdminRoomListPage() {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <div className="flex justify-center gap-2">
+                                            <div className="flex justify-center gap-1">
                                                 <Link
                                                     to={`/admin/rooms/edit/${room.id}`}
-                                                    className="px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-sm font-medium transition-all"
+                                                    className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded text-xs font-medium transition-all"
                                                 >
                                                     Edit
                                                 </Link>
                                                 <button
                                                     onClick={() => handleDelete(room.id, room.name)}
-                                                    className="px-4 py-2 bg-red-50 hover:bg-red-500 text-red-600 hover:text-white border border-red-200 hover:border-red-500 rounded-lg text-sm font-medium transition-all cursor-pointer"
+                                                    className="px-3 py-1.5 bg-red-50 hover:bg-red-500 text-red-600 hover:text-white border border-red-200 hover:border-red-500 rounded text-xs font-medium transition-all cursor-pointer"
                                                 >
                                                     Hapus
                                                 </button>
