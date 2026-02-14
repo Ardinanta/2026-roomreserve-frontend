@@ -50,8 +50,8 @@ export default function AdminBorrowingsPage() {
 
 	return (
 		<div className="max-w-5xl mx-auto px-2 sm:px-6 py-8">
-			<h1 className="text-2xl font-bold mb-4 text-slate-900">Daftar Pengajuan Peminjaman</h1>
-			<div className="mb-4 flex justify-end">
+			<div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+				<h1 className="text-2xl font-bold text-slate-900">Daftar Pengajuan Peminjaman</h1>
 				<input
 					type="text"
 					placeholder="Cari ruangan, keperluan, atau nama..."
@@ -106,20 +106,22 @@ export default function AdminBorrowingsPage() {
 						</tbody>
 					</table>
 				</div>
-				{/* Paging navigation */}
-				<div className="flex justify-center items-center mt-6 gap-2">
-				  <button
-					className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition"
+				{/* Pagination controls */}
+				{totalPages > 1 && (
+				<div className="flex justify-center items-center gap-2 mt-6">
+					<button
+					className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm disabled:opacity-50"
+					onClick={() => setPage(p => Math.max(1, p - 1))}
 					disabled={page === 1}
-					onClick={() => setPage(page - 1)}
-				  >Prev</button>
-				  <span className="px-2 text-sm font-medium text-slate-700">Halaman {page} dari {totalPages}</span>
-				  <button
-					className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition"
+					>⬅</button>
+					<span className="text-sm font-medium">Halaman {page} dari {totalPages}</span>
+					<button
+					className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm disabled:opacity-50"
+					onClick={() => setPage(p => Math.min(totalPages, p + 1))}
 					disabled={page === totalPages}
-					onClick={() => setPage(page + 1)}
-				  >Next</button>
+					>➡</button>
 				</div>
+				)}
 				</>
 			)}
 		</div>

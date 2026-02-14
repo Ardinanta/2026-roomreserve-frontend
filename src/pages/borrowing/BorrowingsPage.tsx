@@ -17,6 +17,9 @@ export default function BorrowingsPage() {
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState("");
   const [cancelingId, setCancelingId] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const pageSize = 8;
   const navigate = useNavigate();
 
   const loadData = () => {
@@ -45,15 +48,40 @@ export default function BorrowingsPage() {
     }
   };
 
+  // Search & Pagination logic
+  const filtered = borrowings
+    .filter(b =>
+      b.roomName.toLowerCase().includes(search.toLowerCase()) ||
+      b.purpose.toLowerCase().includes(search.toLowerCase()) ||
+      b.status.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (a.status === "Pending" && b.status !== "Pending") return -1;
+      if (a.status !== "Pending" && b.status === "Pending") return 1;
+      return 0;
+    });
+  const totalPages = Math.ceil(filtered.length / pageSize);
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+
   return (
     <div className="max-w-5xl mx-auto px-2 sm:px-6 py-8">
-      <h1 className="text-2xl font-bold mb-4 text-slate-900">Daftar Peminjaman Saya</h1>
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <h1 className="text-2xl font-bold text-slate-900">Daftar Peminjaman Saya</h1>
+        <input
+          type="text"
+          placeholder="Cari ruangan, keperluan, atau status..."
+          value={search}
+          onChange={e => { setSearch(e.target.value); setPage(1); }}
+          className="px-4 py-2 border border-slate-300 rounded-lg text-sm w-64"
+        />
+      </div>
       {msg && <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-sm font-medium">{msg}</div>}
       {loading ? (
         <div className="text-center text-slate-500 py-12">Memuat data...</div>
-      ) : borrowings.length === 0 ? (
-        <div className="text-center text-slate-500 py-12">Belum ada peminjaman ruangan.</div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center text-slate-500 py-12">Tidak ada peminjaman yang cocok.</div>
       ) : (
+        <>
         <div className="overflow-x-auto">
           <table className="min-w-full border-2 border-slate-300 rounded-lg overflow-hidden bg-white shadow-sm">
             <thead className="bg-slate-100">
@@ -67,7 +95,7 @@ export default function BorrowingsPage() {
               </tr>
             </thead>
             <tbody>
-              {borrowings.map((b, i) => (
+              {paged.map((b, i) => (
                 <tr
                   key={b.id}
                   className={`border-b border-slate-200 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'} hover:bg-blue-50 transition-all`}
@@ -95,6 +123,23 @@ export default function BorrowingsPage() {
             </tbody>
           </table>
         </div>
+        {/* Pagination controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-6">
+            <button
+              className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm disabled:opacity-50"
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              disabled={page === 1}
+            >⬅</button>
+            <span className="text-sm font-medium">Halaman {page} dari {totalPages}</span>
+            <button
+              className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm disabled:opacity-50"
+              onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+            >➡</button>
+          </div>
+        )}
+        </>
       )}
     </div>
   );

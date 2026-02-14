@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-
+import { useState, useEffect } from "react";
+import { format } from "date-fns";
 import { useParams, useNavigate } from "react-router-dom";
 import { getBorrowingById } from "../../api/borrowings";
 import type { Borrowing } from "../../types";
@@ -71,11 +71,11 @@ export default function AdminBorrowingDetailPage() {
           <div className="text-lg font-semibold text-slate-800">{borrowing.roomName} <span className="text-xs text-slate-500">({borrowing.roomLocation})</span></div>
           <span className={`inline-block px-2 py-1 rounded border text-xs font-semibold ${borrowing.status === "Pending" ? "bg-yellow-100 text-yellow-800 border-yellow-300" : borrowing.status === "Approved" ? "bg-green-100 text-green-800 border-green-300" : borrowing.status === "Rejected" ? "bg-red-100 text-red-800 border-red-300" : "bg-slate-100 text-slate-700 border-slate-300"}`}>{borrowing.status}</span>
         </div>
-        <div className="text-sm text-slate-700 mb-1">Tanggal: <b>{borrowing.borrowDate}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Tanggal: <b>{format(new Date(borrowing.borrowDate), "dd/MM/yyyy")}</b></div>
         <div className="text-sm text-slate-700 mb-1">Waktu: <b>{borrowing.startTime} - {borrowing.endTime}</b></div>
         <div className="text-sm text-slate-700 mb-1">Keperluan: <b>{borrowing.purpose}</b></div>
-        <div className="text-sm text-slate-700 mb-1">Diajukan oleh: <b>{borrowing.borrowerName} ({borrowing.borrowerEmail})</b></div>
-        <div className="text-sm text-slate-700 mb-1">Dibuat: <b>{new Date(borrowing.createdAt).toLocaleString()}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Diajukan oleh: <b>{borrowing.borrowerName || '-'}{borrowing.borrowerEmail ? ` (${borrowing.borrowerEmail})` : ''}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Dibuat: <b>{format(new Date(borrowing.createdAt), "dd/MM/yyyy")}</b></div>
         {borrowing.updatedAt && <div className="text-sm text-slate-700 mb-1">Diupdate: <b>{new Date(borrowing.updatedAt).toLocaleString()}</b></div>}
         {borrowing.status === "Rejected" && borrowing.statusHistories?.length > 0 && (
           <div className="text-sm text-red-600 mt-2">Alasan ditolak: <b>{borrowing.statusHistories.find(h => h.newStatus === "Rejected")?.note}</b></div>

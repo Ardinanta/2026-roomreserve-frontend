@@ -29,7 +29,7 @@ export default function Navbar() {
 
     return (
         <nav className="bg-slate-950 sticky top-0 z-50 shadow-lg shadow-black/10">
-            <div className="w-full px-6">
+            <div className="w-full px-6 py-1">
                 <div className="flex justify-between items-center h-16">
 
                     {/* Logo */}
@@ -46,9 +46,7 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2 bg-white/5 backdrop-blur-sm rounded-full px-1.5 py-1 border border-white/5">
                         {isAuthenticated && !isAdmin && (
                             <>
-                                <Link to="/" className={linkClass("/")} onClick={closeMenu}>
-                                    <span className="flex items-center gap-2">Dashboard</span>
-                                </Link>
+                                {/* Dashboard user dihapus */}
                                 <Link to="/borrowings" className={linkClass("/borrowings")} onClick={closeMenu}>
                                     <span className="flex items-center gap-2">Peminjaman Saya</span>
                                 </Link>
@@ -62,9 +60,7 @@ export default function Navbar() {
                         )}
                         {isAuthenticated && isAdmin && (
                             <>
-                                <Link to="/admin" className={linkClass("/admin")} onClick={closeMenu}>
-                                    <span className="flex items-center gap-2">Dashboard</span>
-                                </Link>
+                                {/* Dashboard admin dihapus */}
                                 <Link to="/admin/borrowings" className={linkClass("/admin/borrowings")} onClick={closeMenu}>
                                     <span className="flex items-center gap-2">Semua Peminjaman</span>
                                 </Link>
@@ -88,7 +84,7 @@ export default function Navbar() {
                                         <span className={`text-[10px] font-semibold leading-tight ${
                                             user?.role === "Admin" ? "text-amber-400" : "text-blue-400"
                                         }`}>
-                                            {user?.role === "Admin" ? "👑 Admin" : "👤 User"}
+                                            {user?.role === "Admin" ? "Admin" : "User"}
                                         </span>
                                     </div>
                                 </div>
@@ -123,7 +119,6 @@ export default function Navbar() {
                 <div className="px-6 pb-6 pt-2 border-t border-white/5 space-y-2">
                     {isAuthenticated && !isAdmin && (
                         <>
-                            <Link to="/" className={linkClass("/") + " block rounded-xl"} onClick={closeMenu}>🏠 Dashboard</Link>
                             <Link to="/borrowings" className={linkClass("/borrowings") + " block rounded-xl"} onClick={closeMenu}>📋 Peminjaman Saya</Link>
                             <Link to="/rooms" className={linkClass("/rooms") + " block rounded-xl"} onClick={closeMenu}>🏢 Ruangan</Link>
                             <Link to="/borrowings/create" className={linkClass("/borrowings/create") + " block rounded-xl"} onClick={closeMenu}>➕ Ajukan</Link>
@@ -131,7 +126,6 @@ export default function Navbar() {
                     )}
                     {isAuthenticated && isAdmin && (
                         <>
-                            <Link to="/admin" className={linkClass("/admin") + " block rounded-xl"} onClick={closeMenu}>📊 Dashboard</Link>
                             <Link to="/admin/borrowings" className={linkClass("/admin/borrowings") + " block rounded-xl"} onClick={closeMenu}>📋 Semua Peminjaman</Link>
                             <Link to="/admin/rooms" className={linkClass("/admin/rooms") + " block rounded-xl"} onClick={closeMenu}>🏢 Kelola Ruangan</Link>
                         </>
@@ -146,7 +140,7 @@ export default function Navbar() {
                                     <div className="flex flex-col">
                                         <span className="text-sm font-semibold text-white">{user?.fullName}</span>
                                         <span className={`text-xs font-semibold ${user?.role === "Admin" ? "text-amber-400" : "text-blue-400"}`}>
-                                            {user?.role === "Admin" ? "👑 Admin" : "👤 User"}
+                                            {user?.role === "Admin" ? "Admin" : "User"}
                                         </span>
                                     </div>
                                 </div>
