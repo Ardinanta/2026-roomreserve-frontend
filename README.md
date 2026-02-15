@@ -15,6 +15,17 @@ Aplikasi ini menyediakan antarmuka pengguna untuk:
 
 ---
 
+## Fitur
+- Registrasi & login user
+- Pengajuan & pembatalan peminjaman
+- Approval/reject oleh admin
+- Riwayat status peminjaman
+- Dashboard admin & user
+- Pencarian, filter, dan pagination
+- UI responsif (TailwindCSS)
+
+---
+
 ## Teknologi
 - React + TypeScript
 - Vite
