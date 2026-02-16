@@ -83,13 +83,13 @@ export default function LoginPage() {
                 </div>
 
                 {/* Demo Info */}
-                <div className="mt-3 bg-white rounded-lg border border-slate-200 p-4">
+                {/* <div className="mt-3 bg-white rounded-lg border border-slate-200 p-4">
                     <p className="text-xs font-semibold text-slate-500 mb-1.5">Akun Demo</p>
                     <div className="space-y-1 text-xs text-slate-400">
                         <p>Admin: <span className="font-mono text-slate-600">admin@roomreserve.com</span> / <span className="font-mono text-slate-600">password123</span></p>
                         <p>User: <span className="font-mono text-slate-600">ahmad@mail.com</span> / <span className="font-mono text-slate-600">password123</span></p>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );
