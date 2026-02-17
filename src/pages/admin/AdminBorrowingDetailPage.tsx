@@ -1,0 +1,141 @@
+import { useState, useEffect } from "react";
+import { format } from "date-fns";
+import { useParams, useNavigate } from "react-router-dom";
+import { getBorrowingById } from "../../api/borrowings";
+import type { Borrowing } from "../../types";
+import api from "../../api/axios";
+
+export default function AdminBorrowingDetailPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [borrowing, setBorrowing] = useState<Borrowing | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState("");
+  const [processing, setProcessing] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+
+  useEffect(() => {
+    if (id) {
+      getBorrowingById(Number(id))
+        .then(setBorrowing)
+        .catch(() => setMsg("Gagal memuat detail peminjaman"))
+        .finally(() => setLoading(false));
+    }
+  }, [id]);
+
+  const handleApprove = async () => {
+    if (!id) return;
+    setProcessing(true);
+    setMsg("");
+    try {
+      await api.patch(`/borrowings/${id}/status`, { status: "Approved" });
+      setMsg("Pengajuan berhasil disetujui.");
+      setTimeout(() => navigate("/admin/borrowings"), 1200);
+    } catch (err: any) {
+      setMsg(err.response?.data?.message || "Gagal menyetujui peminjaman");
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleRejectSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!id || !rejectReason.trim()) return;
+    setProcessing(true);
+    setMsg("");
+    try {
+      await api.patch(`/borrowings/${id}/status`, { status: "Rejected", rejectReason });
+      setMsg("Pengajuan berhasil ditolak.");
+      setTimeout(() => navigate("/admin/borrowings"), 1200);
+    } catch (err: any) {
+      setMsg(err.response?.data?.message || "Gagal menolak peminjaman");
+    } finally {
+      setProcessing(false);
+      setShowRejectModal(false);
+      setRejectReason("");
+    }
+  };
+
+  if (loading) return <div className="text-center py-12 text-slate-500">Memuat detail...</div>;
+  if (!borrowing) return <div className="text-center py-12 text-red-500">Data tidak ditemukan</div>;
+
+  return (
+    <div className="max-w-xl mx-auto px-6 py-8">
+      <h1 className="text-2xl font-bold mb-2 text-slate-900">Detail Peminjaman (Admin)</h1>
+      {msg && (
+        <div className={`mb-4 p-3 rounded-lg text-sm font-medium ${msg.includes("berhasil") ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border-red-200"}`}>{msg}</div>
+      )}
+      <div className="bg-white rounded-lg shadow p-5 mb-6 border border-slate-100">
+        <div className="mb-2 flex justify-between items-center">
+          <div className="text-lg font-semibold text-slate-800">{borrowing.roomName} <span className="text-xs text-slate-500">({borrowing.roomLocation})</span></div>
+          <span className={`inline-block px-2 py-1 rounded border text-xs font-semibold ${borrowing.status === "Pending" ? "bg-yellow-100 text-yellow-800 border-yellow-300" : borrowing.status === "Approved" ? "bg-green-100 text-green-800 border-green-300" : borrowing.status === "Rejected" ? "bg-red-100 text-red-800 border-red-300" : "bg-slate-100 text-slate-700 border-slate-300"}`}>{borrowing.status}</span>
+        </div>
+        <div className="text-sm text-slate-700 mb-1">Tanggal: <b>{format(new Date(borrowing.borrowDate), "dd/MM/yyyy")}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Waktu: <b>{borrowing.startTime} - {borrowing.endTime}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Keperluan: <b>{borrowing.purpose}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Diajukan oleh: <b>{borrowing.borrowerName || '-'}{borrowing.borrowerEmail ? ` (${borrowing.borrowerEmail})` : ''}</b></div>
+        <div className="text-sm text-slate-700 mb-1">Dibuat: <b>{format(new Date(borrowing.createdAt), "dd/MM/yyyy")}</b></div>
+        {borrowing.updatedAt && <div className="text-sm text-slate-700 mb-1">Diupdate: <b>{new Date(borrowing.updatedAt).toLocaleString()}</b></div>}
+        {borrowing.status === "Rejected" && borrowing.statusHistories?.length > 0 && (
+          <div className="text-sm text-red-600 mt-2">Alasan ditolak: <b>{borrowing.statusHistories.find(h => h.newStatus === "Rejected")?.note}</b></div>
+        )}
+      </div>
+      <div className="flex gap-3">
+        {borrowing.status === "Pending" && (
+          <>
+            <button
+              onClick={handleApprove}
+              disabled={processing}
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-sm shadow hover:scale-105 hover:from-green-600 hover:to-green-800 transition disabled:opacity-60"
+            >
+              {processing ? "Memproses..." : "Approve"}
+            </button>
+            <button
+              onClick={() => setShowRejectModal(true)}
+              disabled={processing}
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm shadow hover:scale-105 hover:from-red-600 hover:to-red-800 transition disabled:opacity-60"
+            >
+              Reject
+            </button>
+          </>
+        )}
+        <button onClick={() => navigate("/admin/borrowings")} className="px-4 py-2 rounded-full bg-slate-200 text-slate-800 font-semibold text-sm shadow hover:bg-slate-300 hover:scale-105 transition">Kembali</button>
+      </div>
+
+      {/* Modal alasan penolakan */}
+      {showRejectModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <form
+            onSubmit={handleRejectSubmit}
+            className="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm border border-slate-200 animate-fadeIn"
+          >
+            <h2 className="text-lg font-bold mb-2 text-red-700">Alasan Penolakan</h2>
+            <input
+              type="text"
+              value={rejectReason}
+              onChange={e => setRejectReason(e.target.value)}
+              placeholder="Tulis alasan penolakan..."
+              className="w-full mb-4 px-3 py-2 border border-red-300 rounded focus:outline-none focus:ring-2 focus:ring-red-400 text-sm"
+              autoFocus
+              required
+            />
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => { setShowRejectModal(false); setRejectReason(""); }}
+                className="px-3 py-1 rounded bg-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-300 transition"
+                disabled={processing}
+              >Batal</button>
+              <button
+                type="submit"
+                className="px-3 py-1 rounded bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold text-sm shadow hover:scale-105 hover:from-red-600 hover:to-red-800 transition"
+                disabled={processing || !rejectReason.trim()}
+              >{processing ? "Memproses..." : "Tolak"}</button>
+            </div>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
